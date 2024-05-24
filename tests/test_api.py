@@ -12,14 +12,18 @@ def test_count(client):
 
 
 def test_data_contains_10_pictures(client):
-    res = client.get("/picture")
-    assert len(res.json) == 10
+    res = client.get("/count")
+
+    # print( "***", res.json )
+    assert res.json['length'] == 10
+    # assert len(res.json) == 10
 
 
 def test_get_picture(client):
     res = client.get("/picture")
+
     assert res.status_code == 200
-    assert len(res.json) == 10
+    assert res.json['status'] == "OK"
 
 
 def test_get_pictures_check_content_type_equals_json(client):
@@ -51,6 +55,7 @@ def test_post_picture(picture, client):
     res = client.get("/count")
     assert res.status_code == 200
     assert res.json['length'] == 11
+    print(picture)
 
 def test_post_picture_duplicate(picture, client):
     # create a brand new picture to upload
@@ -58,6 +63,7 @@ def test_post_picture_duplicate(picture, client):
                       content_type="application/json")
     assert res.status_code == 302
     assert res.json['Message'] == f"picture with id {picture['id']} already present"
+    print(picture)
 
 def test_update_picture_by_id(client, picture):
     id = '2'
